@@ -37,7 +37,7 @@ const createReview = async (req, res) => {
   try {
     const userId = req.session.user.id;
     const newReview = {
-      userId,
+      //userId,
       mediaId: req.body.mediaId,
       rating: req.body.rating,
       comment: req.body.comment || '',
@@ -63,7 +63,7 @@ const updateReview = async (req, res) => {
     const reviewId = new ObjectId(req.params.id);
 
     const updatedReview = {
-      userId,
+      //userId,
       mediaId: req.body.mediaId,
       rating: req.body.rating,
       comment: req.body.comment || ''

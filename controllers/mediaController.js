@@ -36,7 +36,7 @@ const createMedia = async (req, res) => {
   try {
     const userId = req.session.user.id;
     const newMedia = {
-      userId,
+      //userId,
       title: req.body.title,
       type: req.body.type,
       genre: req.body.genre || '',
@@ -63,7 +63,7 @@ const updateMedia = async (req, res) => {
     const mediaId = new ObjectId(req.params.id);
 
     const updatedMedia = {
-      userId,
+      //userId,
       title: req.body.title,
       type: req.body.type,
       genre: req.body.genre || '',
