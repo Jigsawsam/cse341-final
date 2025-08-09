@@ -41,7 +41,6 @@ passport.use(new GitHubStrategy({
   clientSecret: process.env.GITHUB_CLIENT_SECRET,
   callbackURL: process.env.CALLBACK_URL
 }, (accessToken, refreshToken, profile, done) => {
-  // You could store profile info in DB here, simplified:
   done(null, profile);
 }));
 

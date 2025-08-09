@@ -5,10 +5,9 @@
     "description": "An API to manage a personal collection of books, movies, or games",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "https://cse341-final-rgbj.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http",
     "https"
   ],
   "paths": {
