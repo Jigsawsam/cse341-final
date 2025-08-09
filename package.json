@@ -1,0 +1,24 @@
+{
+    "dependencies": {
+        "body-parser": "^2.2.0",
+        "cors": "^2.8.5",
+        "dotenv": "^17.2.1",
+        "express": "^5.1.0",
+        "express-session": "^1.18.2",
+        "express-validator": "^7.2.1",
+        "joi": "^17.13.3",
+        "mongodb": "^6.18.0",
+        "passport": "^0.7.0",
+        "passport-github2": "^0.1.12",
+        "swagger": "^0.0.1",
+        "swagger-autogen": "^2.23.7",
+        "swagger-ui-express": "^5.0.1"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.10"
+    },
+    "scripts": {
+        "dev": "nodemon server.js"
+    },
+    "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
+}
