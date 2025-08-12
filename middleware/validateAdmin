@@ -1,0 +1,26 @@
+const { body, validationResult } = require('express-validator');
+
+const adminValidationRules = [
+  body('githubId')
+    .notEmpty().withMessage('GitHub ID is required')
+    .isString().withMessage('GitHub ID must be a string'),
+
+  body('displayName')
+    .notEmpty().withMessage('Display name is required')
+    .isString().withMessage('Display name must be a string')
+    .isLength({ max: 30 }).withMessage('Display name must be less than 30 characters'),
+
+  body('role')
+    .notEmpty().withMessage('Role is required')
+    .isIn(['admin', 'user']).withMessage('Role must be admin or user')
+];
+
+const validateAdmin = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  next();
+};
+
+module.exports = { adminValidationRules, validateAdmin };
