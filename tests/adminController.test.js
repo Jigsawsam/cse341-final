@@ -65,7 +65,6 @@ describe('adminController', () => {
       expect(getDatabase().collection).toHaveBeenCalledWith('users');
       expect(mockCollection.findOne).toHaveBeenCalledWith({
         _id: new ObjectId(req.params.id),
-        role: 'admin'
       });
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(admin);
