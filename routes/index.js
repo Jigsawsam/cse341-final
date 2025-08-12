@@ -15,6 +15,7 @@ router.get('/', (req, res) => {
     
 router.use('/media', require('./mediaRoutes'));
 router.use('/review', require('./reviewRoutes'));
+router.use('/tag', require('./tagRoutes'));
 
 router.get('/login', passport.authenticate('github'), (req, res) => {});
 

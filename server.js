@@ -12,6 +12,7 @@ dotenv.config();
 
 const mediaRoutes = require('./routes/mediaRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const tagRoute = require('./routes/tagRoutes');
 const indexRoutes = require('./routes/index');
 
 const app = express();
@@ -72,6 +73,7 @@ app.get('/logout', (req, res) => {
 app.use('/', indexRoutes);
 app.use('/media', mediaRoutes);
 app.use('/reviews', reviewRoutes);
+app.use('/tags', tagRoute);
 
 // Initialize DB and start server
 initDB(err => {
