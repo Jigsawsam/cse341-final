@@ -23,7 +23,7 @@ const getAdminById = async (req, res) => {
     const adminId = new ObjectId(req.params.id);
     const admin = await getDatabase()
       .collection('users')
-      .findOne({ _id: adminId, role: 'admin' });
+      .findOne({ _id: adminId });
 
     if (!admin) {
       return res.status(404).json({ error: 'Admin not found' });
