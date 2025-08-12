@@ -73,7 +73,7 @@ const updateAdmin = async (req, res) => {
 
     const result = await getDatabase()
       .collection('users')
-      .updateOne({ _id: adminId, role: 'admin' }, { $set: updateFields });
+      .updateOne({ _id: adminId }, { $set: updateFields });
 
     if (result.modifiedCount > 0) {
       res.status(204).send();
