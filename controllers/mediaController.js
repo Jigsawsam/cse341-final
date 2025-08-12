@@ -4,7 +4,7 @@ const { ObjectId } = require('mongodb');
 const getAll = async (req, res) => {
   //#swagger.tags=['Media']
   try {
-    const userId = req.session.user.id;
+    const userId = req.user.githubId;
     const media = await getDatabase().collection('media')
       .find({ userId })
       .toArray();
@@ -18,7 +18,7 @@ const getAll = async (req, res) => {
 const getSingle = async (req, res) => {
   //#swagger.tags=['Media']
   try {
-    const userId = req.session.user.id;
+    const userId = req.user.githubId;
     const mediaId = new ObjectId(req.params.id);
 
     const media = await getDatabase().collection('media').findOne({ _id: mediaId, userId });
@@ -34,7 +34,7 @@ const getSingle = async (req, res) => {
 const createMedia = async (req, res) => {
   //#swagger.tags=['Media']
   try {
-    const userId = req.session.user.id;
+    const userId = req.user.githubId;
     const newMedia = {
       userId,
       title: req.body.title,
@@ -59,7 +59,7 @@ const createMedia = async (req, res) => {
 const updateMedia = async (req, res) => {
   //#swagger.tags=['Media']
   try {
-    const userId = req.session.user.id;
+    const userId = req.user.githubId;
     const mediaId = new ObjectId(req.params.id);
 
     const updatedMedia = {
@@ -89,7 +89,7 @@ const updateMedia = async (req, res) => {
 const deleteMedia = async (req, res) => {
   //#swagger.tags=['Media']
   try {
-    const userId = req.session.user.id;
+    const userId = req.user.githubId;
     const mediaId = new ObjectId(req.params.id);
 
     const response = await getDatabase().collection('media').deleteOne({ _id: mediaId, userId });

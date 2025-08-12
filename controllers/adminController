@@ -1,0 +1,114 @@
+const { ObjectId } = require('mongodb');
+const { getDatabase } = require('../data/database');
+
+// GET all admins
+const getAllAdmins = async (req, res) => {
+  //#swagger.tags=['Admins']
+  try {
+    const admins = await getDatabase()
+      .collection('users')
+      .find({})
+      .toArray();
+
+    res.status(200).json(admins);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch admins', details: err.message });
+  }
+};
+
+// GET single admin by ID
+const getAdminById = async (req, res) => {
+  //#swagger.tags=['Admins']
+  try {
+    const adminId = new ObjectId(req.params.id);
+    const admin = await getDatabase()
+      .collection('users')
+      .findOne({ _id: adminId, role: 'admin' });
+
+    if (!admin) {
+      return res.status(404).json({ error: 'Admin not found' });
+    }
+
+    res.status(200).json(admin);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch admin', details: err.message });
+  }
+};
+
+// POST create new admin
+const createAdmin = async (req, res) => {
+  //#swagger.tags=['Admins']
+  try {
+    if (!req.body.githubId || !req.body.displayName || !req.body.role) {
+      return res.status(400).json({ error: 'githubId and displayName are required' });
+    }
+
+    const newAdmin = {
+      githubId: req.body.githubId,
+      displayName: req.body.displayName,
+      role: req.body.role,
+      createdAt: new Date()
+    };
+
+    const result = await getDatabase()
+      .collection('users')
+      .insertOne(newAdmin);
+
+    res.status(201).json({ id: result.insertedId });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to create admin', details: err.message });
+  }
+};
+
+// PUT update admin
+const updateAdmin = async (req, res) => {
+  //#swagger.tags=['Admins']
+  try {
+    const adminId = new ObjectId(req.params.id);
+
+    const updateFields = {};
+    if (req.body.displayName) updateFields.displayName = req.body.displayName;
+    if (req.body.role) updateFields.role = req.body.role;
+    updateFields.updatedAt = new Date();
+
+    const result = await getDatabase()
+      .collection('users')
+      .updateOne({ _id: adminId, role: 'admin' }, { $set: updateFields });
+
+    if (result.modifiedCount > 0) {
+      res.status(204).send();
+    } else {
+      res.status(404).json({ error: 'Admin not found or no changes made' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update admin', details: err.message });
+  }
+};
+
+// DELETE remove admin
+const deleteAdmin = async (req, res) => {
+  //#swagger.tags=['Admins']
+  try {
+    const adminId = new ObjectId(req.params.id);
+
+    const result = await getDatabase()
+      .collection('users')
+      .deleteOne({ _id: adminId });
+
+    if (result.deletedCount > 0) {
+      res.status(204).send();
+    } else {
+      res.status(404).json({ error: 'Admin not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete admin', details: err.message });
+  }
+};
+
+module.exports = {
+  getAllAdmins,
+  getAdminById,
+  createAdmin,
+  updateAdmin,
+  deleteAdmin
+};

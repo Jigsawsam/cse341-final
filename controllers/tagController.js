@@ -31,7 +31,7 @@ const createTag = async (req, res) => {
 
     const newTag = {
       name: req.body.name.trim(),
-      createdAt: new Date(),
+      description: req.body.description ? req.body.description.trim() : '',
       updatedAt: new Date()
     };
 
@@ -58,6 +58,7 @@ const updateTag = async (req, res) => {
 
     const updatedTag = {
       name: req.body.name.trim(),
+      description: req.body.description ? req.body.description.trim() : '',
       updatedAt: new Date()
     };
 

@@ -5,7 +5,9 @@ const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 const cors = require('cors');
 const dotenv = require('dotenv');
-const { initDB } = require('./data/database');
+const { initDB, getDatabase } = require('./data/database');
+const { ObjectId } = require('mongodb');
+const adminRoutes = require('./routes/adminRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -41,16 +43,40 @@ passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID,
   clientSecret: process.env.GITHUB_CLIENT_SECRET,
   callbackURL: process.env.CALLBACK_URL
-}, (accessToken, refreshToken, profile, done) => {
-  done(null, profile);
+}, async (accessToken, refreshToken, profile, done) => {
+    try {
+        const db = getDatabase();
+        let user = await db.collection('users').findOne({ githubId: profile.id });
+        if (!user) {
+          // create new user with default role
+          user = {
+            githubId: profile.id,
+            displayName: profile.displayName || profile.username,
+            role: 'user', // default role
+            createdAt: new Date(),
+          };
+          const result = await db.collection('users').insertOne(user);
+          user._id = result.insertedId;
+     }
+     done(null, user);
+   } catch (err) {
+     done(err, null);
+   }
 }));
 
 passport.serializeUser((user, done) => {
-  done(null, user);
+  done(null, user.githubId);
 });
-passport.deserializeUser((obj, done) => {
-  done(null, obj);
+passport.deserializeUser(async (githubId, done) => {
+    try {
+        const db = getDatabase();
+        const user = await db.collection('users').findOne({ githubId });
+        done(null, user || null);
+    } catch (err) {
+      done(err, null);
+    }
 });
+    
 
 // OAuth Routes
 app.get('/github/login', passport.authenticate('github'));
@@ -74,6 +100,7 @@ app.use('/', indexRoutes);
 app.use('/media', mediaRoutes);
 app.use('/reviews', reviewRoutes);
 app.use('/tags', tagRoute);
+app.use('/admins', adminRoutes);
 
 // Initialize DB and start server
 initDB(err => {

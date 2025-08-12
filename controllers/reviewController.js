@@ -4,7 +4,7 @@ const { ObjectId } = require('mongodb');
 const getAll = async (req, res) => {
   //#swagger.tags=['Reviews']
   try {
-    const userId = req.session.user.id;
+    const userId = req.user.githubId;
 
     const reviews = await getDatabase().collection('reviews')
       .find({ userId })
@@ -19,7 +19,7 @@ const getAll = async (req, res) => {
 const getSingle = async (req, res) => {
   //#swagger.tags=['Reviews']
   try {
-    const userId = req.session.user.id;
+    const userId = req.user.githubId;
     const reviewId = new ObjectId(req.params.id);
 
     const review = await getDatabase().collection('reviews').findOne({ _id: reviewId, userId });
@@ -35,7 +35,7 @@ const getSingle = async (req, res) => {
 const createReview = async (req, res) => {
   //#swagger.tags=['Reviews']
   try {
-    const userId = req.session.user.id;
+    const userId = req.user.githubId;
     const newReview = {
       userId,
       mediaId: req.body.mediaId,
@@ -59,7 +59,7 @@ const createReview = async (req, res) => {
 const updateReview = async (req, res) => {
   //#swagger.tags=['Reviews']
   try {
-    const userId = req.session.user.id;
+    const userId = req.user.githubId;
     const reviewId = new ObjectId(req.params.id);
 
     const updatedReview = {
@@ -87,7 +87,7 @@ const updateReview = async (req, res) => {
 const deleteReview = async (req, res) => {
   //#swagger.tags=['Reviews']
   try {
-    const userId = req.session.user.id;
+    const userId = req.user.githubId;
     const reviewId = new ObjectId(req.params.id);
 
     const response = await getDatabase().collection('reviews').deleteOne({ _id: reviewId, userId });
